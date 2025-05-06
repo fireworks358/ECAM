@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ECAM Anaesthetic Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+   <!-- Add inside <style> in <head> -->
+<style>
+   body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 18px; /* Adjust the base font size */
+      }
+    .checklist-item a {
+      color: #63b3ed; /* Tailwind blue-400 */
+      text-decoration: underline;
+    }
+  
+    .checklist-item img {
+      max-width: 60%;
+      border: 2px solid #4ade80; /* Tailwind green-400 */
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+  </style>
+  
+      
+      
+    </style>
+  </head>
+  <body class="bg-black text-green-300 p-4 min-h-screen">
+    <div id="menu" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <button onclick="showChecklist('anaphylaxis')" class="ecam-button bg-blue-900 border border-blue-400 p-6 rounded-xl text-xl">Anaphylaxis</button>
+      <button onclick="showChecklist('mh')" class="ecam-button bg-blue-900 border border-blue-400 p-6 rounded-xl text-xl">Malignant Hyperthermia</button>
+      <button onclick="showChecklist('bradycardia')" class="ecam-button bg-blue-900 border border-blue-400 p-6 rounded-xl text-xl">Bradycardia</button>
+      <button onclick="showChecklist('hypotension')" class="ecam-button bg-blue-900 border border-blue-400 p-6 rounded-xl text-xl">Hypotension</button>
+      <button onclick="showChecklist('cico')" class="ecam-button bg-blue-900 border border-blue-400 p-6 rounded-xl text-xl">CICO</button>
+      <button onclick="showChecklist('Cardiac_Arrest')" class="ecam-button bg-blue-900 border border-blue-400 p-6 rounded-xl text-xl">Cardiac Arrest</button>
+    </div>
+
+    <div id="checklist" class="hidden">
+      <button onclick="goBack()" class="text-blue-400 underline mb-4 block text-lg">← BACK</button>
+      <h1 id="title" class="text-3xl text-white mb-6 border-b border-green-400 pb-2 uppercase">Title</h1>
+      <div id="steps" class="space-y-4 overflow-y-auto pr-2"></div>
+    </div>
+
+    <script>
+      const data = {
+        
+
+
+        Cardiac_Arrest: [
+            "DECLARE 'Cardiac Arrest' - NOTE time",
+            "CHEST COMPRESSIONS - 100bpm, depth 5 cm",
+            "DELEGATE task - evaluate potential causes (4H's 4T's?)",
+            "100% OXYGEN - ensure delivery (Bellows moving? Manual vent?)",
+            "TURN OFF anaesthetic",
+            "AIRWAY - Patent? Position?",
+            "ABSENT CO2?, presume oesophageal intubation until absolutely excluded",
+            "Breathing - Check chest symmetry, rate, breath sounds, SpO2, measured expired volume, ETCO2",
+            "Adequate IV access? Consider IO (outside Theatre 14)",
+            'Follow Resuscitation Council (UK) <a href="https://www.resus.org.uk/sites/default/files/2024-01/Adult%20Advanced%20Life%20Support%20Algorithm%202021%20Aug%202023.pdf"> Guidelines</a>',
+            "If there is return of spontaneous circulation, re-establish anaesthesia",
+        ],
+        anaphylaxis: [
+                "STOP the trigger",
+                "CALL for help (2222)",
+                "ADRENALINE 50 mcg IV",
+                "FLUIDS IV bolus",
+                `View full <a href="QRH.pdf#page=6" target="_blank">QRH</a>`,
+                `<img src="https://images.ctfassets.net/uszvm6pv23md/30YxBtBkfekY46Icym86Y2/bacd0ce8921dca9e58719d052afc1e0d/anzcor-anaphylaxis-flowchart-20190316.png" class="w-1/2 mx-auto rounded-lg border border-green-400" alt="Anaphylaxis flowchart" />`,
+            ],
+        mh: [
+          "STOP volatile agents, switch to TIVA",
+          "CALL for help, inform theatre",
+          "ADMINISTER DANTROLENE 2.5 mg/kg",
+          "HYPERVENTILATE with 100% O2",
+          "COOL the patient (cold fluids, ice packs)",
+          "TREAT acidosis and hyperkalemia",
+        ],
+        bradycardia: [
+          "Check monitoring leads and signal",
+          "Assess perfusion",
+          "ATROPINE 600 mcg IV",
+          "Consider glycopyrrolate or adrenaline",
+          "Pace if unresponsive to drugs",
+        ],
+        hypotension: [
+          "CHECK for bleeding / surgical cause",
+          "FLUID bolus",
+          "VASOPRESSOR: Metaraminol or Phenylephrine",
+          "Titrate to MAP > 65 mmHg",
+          "ESCALATE if persistent",
+        ],
+        cico: [
+          "CALL for help (2222 - airway emergency)",
+          "TRY mask ventilation, 2-person technique",
+          "PLACE supraglottic airway",
+          "IF unsuccessful: PREPARE for front-of-neck access",
+          "PERFORM emergency cricothyroidotomy",
+        ],
+      };
+
+      function showChecklist(key) {
+        const title = key.replace(/_/g, ' ');
+        document.getElementById("menu").classList.add("hidden");
+        document.getElementById("checklist").classList.remove("hidden");
+        document.getElementById("title").innerText = title;
+
+        const stepsContainer = document.getElementById("steps");
+        stepsContainer.innerHTML = "";
+        data[key].forEach((step, index) => {
+          const div = document.createElement("div");
+          div.className =
+            "p-4 border-2 rounded-lg bg-gray-900 border-gray-600 cursor-pointer";
+          div.innerHTML = `<span class="text-lg leading-snug">${step}</span>`;
+          div.onclick = () => {
+            div.classList.toggle("bg-green-900");
+            div.classList.toggle("border-green-400");
+            div.classList.toggle("text-white");
+          };
+          stepsContainer.appendChild(div);
+        });
+      }
+
+      function goBack() {
+        document.getElementById("checklist").classList.add("hidden");
+        document.getElementById("menu").classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>
